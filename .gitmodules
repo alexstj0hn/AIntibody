@@ -1,0 +1,3 @@
+[submodule "tools/structural-evolution/structural-evolution"]
+	path = tools/structural-evolution/structural-evolution
+	url = https://github.com/alexstj0hn/structural-evolution.git
