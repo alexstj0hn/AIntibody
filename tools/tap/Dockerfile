@@ -10,6 +10,9 @@ RUN apt-get update && apt-get install -y wget && \
 # Set conda environment variables
 ENV PATH="/opt/conda/bin:$PATH"
 
+# Force Python to run in unbuffered mode for live logging
+ENV PYTHONUNBUFFERED=1
+
 # Create a working directory
 WORKDIR /app
 

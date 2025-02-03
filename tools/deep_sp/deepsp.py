@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 import os
 import sys
 import subprocess
@@ -14,7 +13,7 @@ def build_docker_image():
         print("Docker image built successfully.")
 
 def run_deepsp(input_file, output_file):
-    """Runs the DeepSP container with correctly mounted paths."""
+    """Runs the DeepSP container with correctly mounted paths and streams stdout."""
     input_path = os.path.abspath(input_file)
     output_path = os.path.abspath(output_file)
     mount_dir = os.path.dirname(input_path)
@@ -28,7 +27,19 @@ def run_deepsp(input_file, output_file):
         "--output", output_path
     ]
 
-    subprocess.run(cmd, check=True)
+    # Run the command using Popen and stream output
+    process = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, text=True, bufsize=1)
+
+    # Print each line as it is received
+    for line in process.stdout:
+        print(line, end="")  # Print line without extra newlines
+
+    # Wait for process to complete
+    process.wait()
+
+    if process.returncode != 0:
+        print(f"Error: Process exited with code {process.returncode}", file=sys.stderr)
+        sys.exit(process.returncode)
 
 def main():
     if len(sys.argv) != 3:

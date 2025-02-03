@@ -1,5 +1,5 @@
 # Use a conda-based image
-FROM continuumio/miniconda3:4.10.3
+FROM continuumio/miniconda3:latest
 
 # Create a working directory
 WORKDIR /app
@@ -11,13 +11,10 @@ COPY environment.yml /app/environment.yml
 RUN conda env create -f /app/environment.yml
 
 # (Optional) Switch the shell so subsequent commands are in that environment
-SHELL ["conda", "run", "-n", "deepSP", "/bin/bash", "-c"]
+SHELL ["conda", "run", "-n", "esm", "/bin/bash", "-c"]
 
-# Clone the DeepSP repository inside the container
-RUN git clone https://github.com/Lailabcode/DeepSP.git /app/DeepSP
-
-# Copy only your scripts (not DeepSP, since it's cloned)
+# Copy scripts
 COPY scripts /app/scripts
 
 # Set the default command to run the Python orchestrator
-ENTRYPOINT ["conda", "run", "-n", "deepSP", "python", "/app/scripts/run.py"]
+ENTRYPOINT ["conda", "run", "-n", "esm", "python", "/app/scripts/run.py"]
